@@ -72,7 +72,7 @@ st.markdown(
             To test this application you can download a sample CSV file attached here:
         </p>
         <p style="color:white; text-align:center;">
-            <a href="https://raw.githubusercontent.com/your-username/your-repo/main/sample.csv" target="_blank" style="color:white;">Download Sample CSV</a>
+            <a href="https://raw.githubusercontent.com/Asharu369/project_1/main/sample.csv" target="_blank" style="color:white;">Download Sample CSV</a>
         </p>
     </div>
     """,
