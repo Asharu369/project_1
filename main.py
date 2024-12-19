@@ -21,7 +21,7 @@ app.add_middleware(
    allow_headers=["*"],  # Allow all headers
 )
 
-# Constants for the linear regression model
+# Constants for the linear regression model(taken from training_star_size_predictor.ipynb)
 W = 1.982015  # Coefficient (slope) of the linear regression model
 b = 9.500380  # Intercept (bias) of the linear regression model
 
