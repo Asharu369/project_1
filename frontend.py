@@ -69,14 +69,22 @@ st.markdown(
             <li><strong>Second column</strong>: Respective size of the stars</li>
         </ul>
         <p style="color:white; text-align:center;">
-            To test this application, you can download a sample CSV file attached here:
-        </p>
-        <p style="color:white; text-align:center;">
-            <a href="https://raw.githubusercontent.com/Asharu369/project_1/main/input_star_data.csv" target="_blank" style="color:white;">Download Sample CSV</a>
+            To test this application, you can download a sample CSV file below:
         </p>
     </div>
     """,
     unsafe_allow_html=True
+)
+
+# Provide the download button for the sample CSV
+sample_csv_url = "https://raw.githubusercontent.com/Asharu369/project_1/main/input_star_data.csv"
+sample_csv = requests.get(sample_csv_url).content
+
+st.download_button(
+    label="📥 Download Sample CSV",
+    data=sample_csv,
+    file_name="input_star_data.csv",
+    mime="text/csv"
 )
 
 # File uploader for users to upload their CSV file
