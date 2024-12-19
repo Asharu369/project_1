@@ -69,10 +69,10 @@ st.markdown(
             <li><strong>Second column</strong>: Respective size of the stars</li>
         </ul>
         <p style="color:white; text-align:center;">
-            To test this application you can download a sample CSV file attached here:
+            To test this application, you can download a sample CSV file attached here:
         </p>
         <p style="color:white; text-align:center;">
-            <a href="https://raw.githubusercontent.com/Asharu369/project_1/main/sample.csv" target="_blank" style="color:white;">Download Sample CSV</a>
+            <a href="https://raw.githubusercontent.com/Asharu369/project_1/main/input_star_data.csv" target="_blank" style="color:white;">Download Sample CSV</a>
         </p>
     </div>
     """,
