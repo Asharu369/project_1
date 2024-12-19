@@ -101,7 +101,7 @@ if uploaded_file:
     # Send the file to the FastAPI `predict` endpoint
     uploaded_file.seek(0)  # Reset file pointer before sending to API
     response = requests.post(
-        "http://localhost:8000/predict/",  # Update with the actual API URL if deployed
+        "https://star-size-predictor-tl61.onrender.com/predict/",  # Update with the actual API URL if deployed
         files={"file": uploaded_file.getvalue()}
     )
 
@@ -118,7 +118,7 @@ if uploaded_file:
             with st.spinner('Generating plot...'):
                 predicted_file.seek(0)
                 plot_response = requests.post(
-                    "http://localhost:8000/plot/",  # Update with the actual API URL if deployed
+                    "https://star-size-predictor-tl61.onrender.com/plot/",  # Update with the actual API URL if deployed
                     files={"file": predicted_file.getvalue()}
                 )
 
