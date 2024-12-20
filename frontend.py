@@ -90,7 +90,7 @@ if page == "Home":
 
 # Prediction Page Content
 elif page == "Predict":
-    st.title("Star Size Predictor by Asharu 🛸")
+    st.title("Star Size Predictor by Asharu ")
 
     # Sidebar input for the number of stars to generate
     num_stars = st.sidebar.number_input("Enter the number of stars to generate:", min_value=100, max_value=1000, value=500, step=50)
@@ -180,7 +180,7 @@ elif page == "Predict":
         st.write("### Predictions and Plot")
         # Send the file to the FastAPI predict endpoint (replace with actual URL)
         response = requests.post(
-            "https://your-backend-url.onrender.com/predict/",  # Replace with your FastAPI URL
+            "https://star-size-predictor-tl61.onrender.com/predict/",  
             files={"file": uploaded_file.getvalue()}
         )
 
@@ -195,7 +195,7 @@ elif page == "Predict":
                 with st.spinner('Generating plot...'):
                     predicted_file.seek(0)
                     plot_response = requests.post(
-                        "https://your-backend-url.onrender.com/plot/",  # Replace with your FastAPI URL
+                        "https://star-size-predictor-tl61.onrender.com/plot/",  
                         files={"file": predicted_file.getvalue()}
                     )
 
