@@ -1,9 +1,9 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
+import time
 import requests
-from io import BytesIO
-from PIL import Image
+import io
 
 # Streamlit app configuration
 st.set_page_config(
@@ -50,10 +50,20 @@ st.markdown(
         padding: 20px;
         border-radius: 10px;
     }}
+    .footer {{
+        background-color: rgba(0, 0, 0, 0.6);
+        color: white;
+        padding: 10px;
+        text-align: center;
+        border-radius: 10px;
+    }}
     </style>
     """,
     unsafe_allow_html=True
 )
+
+# Backend URL (update if your backend is deployed)
+backend_url = "http://localhost:8000"
 
 # Home Page Content
 if page == "Home":
@@ -63,34 +73,30 @@ if page == "Home":
         **Star Size Predictor** uses machine learning to predict the size of stars based on their brightness.
         
         ### Instructions:
-        1. **Generate Dataset**: Enter the number of stars you want to generate using a simple random generator.
-        2. **Make Predictions**: Upload your dataset and the app will predict the size of the stars based on brightness.
-        3. **View Results**: After uploading your data, the app will display the predicted results and show a graphical plot.
+        1. **Create Dataset**: Enter the number of stars you want to generate.
+        2. **Generate Predictions**: Click the button to generate predictions for the stars based on their brightness.
+        3. **View Plot**: Click on the "Plot" button to get the linear regression plot for the prediction results.
         
         ### Features:
-        - Download sample CSV for testing.
         - Generate a random dataset based on brightness and star size.
-        - Upload your own dataset for prediction.
-        - Get predictions and a linear regression plot.
-        
-        
-        """
+        - Get predictions based on your generated data.
+        - View results alongside the plot.
+    """
     )
-    
+
+    # Footer with project info on Home page
     st.markdown(
         """
-        <div style="background-color: rgba(0, 0, 0, 0.6); padding: 20px; border-radius: 10px; margin-top: 20px;">
-            <p style="color:white; text-align:center;">
-                Developed by <strong>Muhammed Asharudheen</strong> as part of the ML4A Training Program at Spartifical.
-            </p>
+        <div class="footer">
+            <p>This project is developed by <strong>Muhammed Asharudheen</strong> as part of the ML4A Training Program at Spartifical.</p>
         </div>
-        """, 
+        """,
         unsafe_allow_html=True
     )
 
 # Prediction Page Content
 elif page == "Predict":
-    st.title("Star Size Predictor by Asharu ")
+    st.title("Star Size Predictor by Asharu")
 
     # Sidebar input for the number of stars to generate
     num_stars = st.sidebar.number_input("Enter the number of stars to generate:", min_value=100, max_value=1000, value=500, step=50)
@@ -103,119 +109,57 @@ elif page == "Predict":
             The dataset is generated randomly, and the model is trained on this data.
             
             **Steps:**
-            1. **Generate Dataset**: Enter the number of stars you want to generate.
-            2. **Make Predictions**: Upload your dataset.
+            1. **Create Dataset**: Enter the number of stars you want to generate.
+            2. **Generate Predictions**: Click on the "Generate Datasets" button.
             3. **View Results**: See predicted values and a graphical plot.
             """
         )
 
-    # Add CSV file format instructions inside an expandable section
-    with st.expander("CSV File Format Instructions"):
-        st.markdown(
-            """
-            Your CSV file should have two columns:
-            - **Brightness**: The brightness of the stars.
-            - **True Size**: The actual size of the stars.
-            
-            The app will process this data to predict star sizes based on brightness.
-            """
-        )
-
-    # Provide the download button for the sample CSV
-    sample_csv_url = "https://raw.githubusercontent.com/Asharu369/project_1/main/input_star_data.csv"
-    sample_csv = requests.get(sample_csv_url).content
-
-    st.download_button(
-        label="📥 Download Sample CSV",
-        data=sample_csv,
-        file_name="input_star_data.csv",
-        mime="text/csv"
-    )
-
-    # Provide a button to generate the dataset
-    if st.button("Generate Dataset"):
-        # Simulate dataset generation based on the input number of stars
-        N_SAMPLES = num_stars
-
-        # Generate Data
-        X_test = 3 * np.random.rand(N_SAMPLES, 1)
-        y_test = 9 + 2 * X_test + np.random.rand(N_SAMPLES, 1)
-
-        # Convert arrays into dict
-        dict_info = {'Brightness': X_test.reshape(-1), 'True Size': y_test.reshape(-1,)}
-        
-        # Convert dict to pandas dataframe
-        input_df = pd.DataFrame(dict_info)
-
-        # Provide a download button for the generated dataset
-        st.write("### Generated Dataset:")
-        st.dataframe(input_df)
-
-        # Save and provide download link for generated CSV
-        csv_data = input_df.to_csv(index=False).encode('utf-8')
-        st.download_button(
-            label="📥 Download Generated Dataset",
-            data=csv_data,
-            file_name="generated_star_data.csv",
-            mime="text/csv"
-        )
-
-    # File uploader and result display section
-    uploaded_file = st.file_uploader(
-        "Upload your CSV file:", type=["csv"], help="Upload a file with 'inputs' and 'targets' columns."
-    )
-
-    if uploaded_file:
-        st.write(f"**Uploading file:** {uploaded_file.name}")
-        uploaded_file.seek(0)  # Reset the file pointer
-
-        # Read the uploaded file into a Pandas DataFrame
-        original_df = pd.read_csv(uploaded_file)
-
-        # Display the uploaded dataset
-        st.write("### Original Data:")
-        st.dataframe(original_df)
-
-        # Make prediction and plot
-        st.write("### Predictions and Plot")
-        # Send the file to the FastAPI predict endpoint (replace with actual URL)
-        response = requests.post(
-            "https://star-size-predictor-tl61.onrender.com/predict/",  
-            files={"file": uploaded_file.getvalue()}
-        )
+    # Create a button to generate the dataset and predictions
+    if st.button("Generate Datasets"):
+        # Make a request to the backend to generate the dataset
+        response = requests.post(f"{backend_url}/generate-dataset/", json={"num_stars": num_stars})
 
         if response.status_code == 200:
-            predicted_file = BytesIO(response.content)
-            predicted_df = pd.read_csv(predicted_file)
-            st.write("### Predicted Data:")
-            st.dataframe(predicted_df)
+            # Load the original dataset
+            input_df = pd.read_csv(io.BytesIO(response.content))
 
-            # Plotting button
-            if st.button("Plot the Linear Regression"):
-                with st.spinner('Generating plot...'):
-                    predicted_file.seek(0)
-                    plot_response = requests.post(
-                        "https://star-size-predictor-tl61.onrender.com/plot/",  
-                        files={"file": predicted_file.getvalue()}
-                    )
+            # Show message that predictions are being generated
+            with st.spinner("Generating predictions..."):
+                time.sleep(2)  # Simulate the time it takes to generate predictions
 
-                    if plot_response.status_code == 200:
-                        plot_image = Image.open(BytesIO(plot_response.content))
-                        st.image(plot_image, caption="Linear Regression Analysis", use_container_width=True)
-                    else:
-                        st.error("Failed to generate the plot. Please try again.")
+                # Make a request to the backend to generate predictions
+                predict_response = requests.post(f"{backend_url}/predict/", files={"file": io.BytesIO(response.content)})
+
+                if predict_response.status_code == 200:
+                    predicted_df = pd.read_csv(io.BytesIO(predict_response.content))
+
+                    # Display the datasets side by side using columns
+                    col1, col2 = st.columns(2)
+
+                    with col1:
+                        st.subheader("Original Dataset")
+                        st.dataframe(input_df)
+
+                    with col2:
+                        st.subheader("Predicted Dataset")
+                        st.dataframe(predicted_df)
+
+                    # Option to show the plot
+                    if st.button("Plot"):
+                        plot_response = requests.post(f"{backend_url}/plot/", files={"file": io.BytesIO(predict_response.content)})
+
+                        if plot_response.status_code == 200:
+                            st.image(plot_response.content, caption="Linear Regression Plot", use_column_width=True)
+                        else:
+                            st.error("Error generating plot.")
+                else:
+                    st.error("Error generating predictions.")
         else:
-            st.error("Failed to process the uploaded file. Please check the file format and try again.")
+            st.error("Error generating dataset.")
 
-    # Footer with project info
-    st.markdown(
-        """
-        <div style="background-color:#333; color:white; padding: 10px; text-align:center;">
-            <p>This project is developed by <strong>Muhammed Asharudheen</strong> as part of the ML4A Training Program at Spartifical.</p>
-        </div>
-        """,
-        unsafe_allow_html=True
-    )
+
+
 
 
 
