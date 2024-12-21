@@ -114,4 +114,3 @@ async def plot(file: UploadFile = File(...)):
         media_type="image/png",
         headers={"Content-Disposition": "attachment; filename=plot.png"}
     )
-
