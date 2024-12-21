@@ -1,6 +1,5 @@
 import streamlit as st
 import pandas as pd
-import numpy as np
 import time
 import requests
 import io
@@ -63,7 +62,7 @@ st.markdown(
 )
 
 # Backend URL (update if your backend is deployed)
-backend_url = "http://localhost:8000"
+backend_url = "https://star-size-predictor-tl61.onrender.com"
 
 # Home Page Content
 if page == "Home":
@@ -136,31 +135,6 @@ elif page == "Predict":
 
                     # Display the datasets side by side using columns
                     col1, col2 = st.columns(2)
-
-                    with col1:
-                        st.subheader("Original Dataset")
-                        st.dataframe(input_df)
-
-                    with col2:
-                        st.subheader("Predicted Dataset")
-                        st.dataframe(predicted_df)
-
-                    # Option to show the plot
-                    if st.button("Plot"):
-                        plot_response = requests.post(f"{backend_url}/plot/", files={"file": io.BytesIO(predict_response.content)})
-
-                        if plot_response.status_code == 200:
-                            st.image(plot_response.content, caption="Linear Regression Plot", use_column_width=True)
-                        else:
-                            st.error("Error generating plot.")
-                else:
-                    st.error("Error generating predictions.")
-        else:
-            st.error("Error generating dataset.")
-
-
-
-
 
 
 
