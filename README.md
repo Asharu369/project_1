@@ -6,7 +6,7 @@ This [web application](https://starsizepredictor.streamlit.app/) allows users to
 - **Generate Synthetic Dataset**: Users can specify the number of stars they want in the dataset, which includes brightness values and the corresponding true sizes.
 - **Linear Regression Predictions**: A linear regression model is used to predict star sizes based on the brightness data.
 - **Data Visualization**: The app enables users to plot the predicted data and compare it with actual values to assess model performance.
-- **API Documentation**: The backend API is deployed on Render. Explore the API documentation [here](https://starsize-predictor.onrender.com/docs).
+- **API Documentation**: The backend API is deployed on Render. Explore the API documentation [here](https://star-size-predictor-tl61.onrender.com/docs).
 
 ## Why Use a Synthetic Dataset?
 
