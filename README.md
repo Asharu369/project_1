@@ -2,6 +2,8 @@
 
 This [web application](https://starsizepredictor.streamlit.app/) allows users to predict star sizes based on their brightness using linear regression. It generates a synthetic dataset of stars, which is used to train a model that predicts the size of stars based on their brightness values. This app serves as an educational tool for understanding linear regression and gradient descent in machine learning.
 
+Demonstration of the [web app](https://youtu.be/doK0owyQA14)
+
 ## Key Features:
 - **Generate Synthetic Dataset**: Users can specify the number of stars they want in the dataset, which includes brightness values and the corresponding true sizes.
 - **Linear Regression Predictions**: A linear regression model is used to predict star sizes based on the brightness data.
